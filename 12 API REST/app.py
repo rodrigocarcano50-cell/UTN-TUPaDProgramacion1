@@ -27,6 +27,10 @@ def faltan_campos(datos, campos):
     return False
 
 
+def es_entero(valor):
+    return isinstance(valor, int) and not isinstance(valor, bool)
+
+
 @aplicacion.route("/api/autores", methods=["GET"])
 def listar_autores():
     return jsonify(obtener_autores_db()), 200
@@ -61,6 +65,9 @@ def crear_libro():
     if faltan_campos(datos, ["titulo", "anio", "autor_id"]):
         return jsonify({"error": "Faltan campos obligatorios: titulo, anio, autor_id"}), 400
 
+    if not es_entero(datos["anio"]):
+        return jsonify({"error": "El campo anio debe ser un número entero"}), 400
+
     if obtener_autor_db(datos["autor_id"]) is None:
         return jsonify({"error": "Autor no encontrado"}), 404
 
@@ -86,6 +93,12 @@ def actualizar_libro(libro_id):
 
     if título is None or año is None or autor_id is None:
         return jsonify({"error": "Los campos no pueden ser nulos"}), 400
+
+    if isinstance(título, str) and not título.strip():
+        return jsonify({"error": "El título no puede estar vacío"}), 400
+
+    if not es_entero(año):
+        return jsonify({"error": "El campo anio debe ser un número entero"}), 400
 
     if obtener_autor_db(autor_id) is None:
         return jsonify({"error": "Autor no encontrado"}), 404

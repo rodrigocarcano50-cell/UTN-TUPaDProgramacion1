@@ -10,7 +10,7 @@ def probar_api():
     print("Respuesta:", respuesta.json())
     respuesta.raise_for_status()
 
-    print("\n2. POST /api/autores")
+    print("\n2a. POST /api/autores")
     respuesta = requests.post(
         f"{URL_BASE}/api/autores",
         json={"nombre": "Autor de Prueba", "nacionalidad": "Argentina"},
@@ -20,7 +20,7 @@ def probar_api():
     respuesta.raise_for_status()
     autor_id = respuesta.json()["id"]
 
-    print("\n2. POST /api/libros")
+    print("\n2b. POST /api/libros")
     respuesta = requests.post(
         f"{URL_BASE}/api/libros",
         json={"titulo": "Libro de Prueba", "anio": 2024, "autor_id": autor_id},
